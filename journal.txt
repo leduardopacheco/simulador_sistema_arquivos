@@ -1,0 +1,6 @@
+Criado diretório: /documentos
+Criado arquivo: /documentos/relatorio.txt
+Arquivo renomeado: /documentos/relatorio.txt → resumo.txt
+Arquivo copiado: /documentos/resumo.txt → /documentos/copia.txt
+Removido arquivo: /documentos/copia.txt
+Criado diretório: /documentos/2025
