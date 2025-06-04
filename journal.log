@@ -1,0 +1,8 @@
+[2025-06-04 16:55:44] Criado diretório: /documentos
+[2025-06-04 16:55:44] Criado diretório: /imagens
+[2025-06-04 16:55:44] Criado arquivo: /documentos/arquivo1.txt
+[2025-06-04 16:55:44] Criado arquivo: /imagens/foto.png
+[2025-06-04 16:55:44] Arquivo copiado: /documentos/arquivo1.txt → /documentos/arquivo2.txt
+[2025-06-04 16:55:44] Arquivo renomeado: /documentos/arquivo2.txt → /documentos/relatorio_final.txt
+[2025-06-04 16:55:44] Removido arquivo: /imagens/foto.png
+[2025-06-04 16:55:44] Renomeado diretório: /documentos → /meus_documentos

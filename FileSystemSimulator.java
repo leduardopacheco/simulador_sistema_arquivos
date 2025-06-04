@@ -11,21 +11,21 @@ public class FileSystemSimulator implements Serializable {
     }
 
     public void salvarSistema() {
-        try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("filesystem.txt"))) {
+        try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("base.dat"))) {
             out.writeObject(raiz);
         } catch (IOException e) {
             System.out.println("Erro ao salvar sistema de arquivos.");
         }
-        journal.salvar("journal.txt");
+        journal.salvar("journal.log");
     }
 
     public void carregarSistema() {
-        try (ObjectInputStream in = new ObjectInputStream(new FileInputStream("filesystem.txt"))) {
+        try (ObjectInputStream in = new ObjectInputStream(new FileInputStream("base.dat"))) {
             raiz = (Diretorio) in.readObject();
         } catch (Exception ignored) {
             raiz = new Diretorio("/");
         }
-        journal.carregar("journal.txt");
+        journal.carregar("journal.log");
     }
 
     private Diretorio navegarParaDiretorio(String caminho) {
