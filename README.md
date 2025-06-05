@@ -101,6 +101,7 @@ Este mecanismo simples de journaling é importante para depuração e pode futur
 - ✅ Listar o conteúdo de diretórios
 - ✅ Registro (journal) persistente de todas as ações realizadas
 - ✅ Salvamento automático do estado do sistema em arquivo `.dat`
+- ✅ Listagem da árvore de pastas
 
 ---
 
@@ -135,6 +136,7 @@ apagar_arquivo /caminho/arquivo.txt
 renomear_arquivo /caminho/arquivo.txt novo_nome.txt
 listar /caminho
 log
+arvore
 sair
 ```
 
