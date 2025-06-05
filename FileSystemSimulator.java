@@ -44,11 +44,19 @@ public class FileSystemSimulator implements Serializable {
         String[] partes = caminho.split("/");
         Diretorio atual = raiz;
         for (int i = 1; i < partes.length; i++) {
-            atual.getSubdiretorios().putIfAbsent(partes[i], new Diretorio(partes[i]));
-            atual = atual.getSubdiretorios().get(partes[i]);
+            String nomeDir = partes[i];
+            if (!atual.getSubdiretorios().containsKey(nomeDir)) {
+                atual.getSubdiretorios().put(nomeDir, new Diretorio(nomeDir));
+                journal.registrar("Criado diretório: " + caminho);
+                salvarSistema();
+            } else if (i == partes.length - 1) {
+                System.out.println("Diretório já existe: " + caminho);
+                return;
+            }
+            atual = atual.getSubdiretorios().get(nomeDir);
         }
-        journal.registrar("Criado diretório: " + caminho);
     }
+
 
     public void apagarDiretorio(String caminho) {
         int index = caminho.lastIndexOf("/");
@@ -58,6 +66,7 @@ public class FileSystemSimulator implements Serializable {
         if (dirPai != null && dirPai.getSubdiretorios().containsKey(nome)) {
             dirPai.removerSubdiretorio(nome);
             journal.registrar("Removido diretório: " + caminho);
+            salvarSistema();
         }
     }
 
@@ -71,19 +80,36 @@ public class FileSystemSimulator implements Serializable {
             dir.setNome(novoNome);
             dirPai.getSubdiretorios().put(novoNome, dir);
             journal.registrar("Renomeado diretório: " + caminho + " → " + novoNome);
+            salvarSistema();
         }
     }
 
     public void criarArquivo(String caminho) {
         int index = caminho.lastIndexOf("/");
+        if (index == -1 || index == caminho.length() - 1) {
+            System.out.println("Caminho inválido para arquivo.");
+            return;
+        }
+
         String dirPath = caminho.substring(0, index);
         String nome = caminho.substring(index + 1);
         Diretorio dir = navegarParaDiretorio(dirPath);
-        if (dir != null) {
-            dir.getArquivos().put(nome, new Arquivo(nome));
-            journal.registrar("Criado arquivo: " + caminho);
+
+        if (dir == null) {
+            System.out.println("Diretório não encontrado: " + dirPath);
+            return;
         }
+
+        if (dir.getArquivos().containsKey(nome)) {
+            System.out.println("Arquivo já existe: " + caminho);
+            return;
+        }
+
+        dir.getArquivos().put(nome, new Arquivo(nome));
+        journal.registrar("Criado arquivo: " + caminho);
+        salvarSistema();
     }
+
 
     public void copiarArquivo(String origem, String destino) {
         int i1 = origem.lastIndexOf("/");
@@ -100,6 +126,7 @@ public class FileSystemSimulator implements Serializable {
             copia.setConteudo(arqOriginal.getConteudo());
             d2.getArquivos().put(nomeDestino, copia);
             journal.registrar("Arquivo copiado: " + origem + " → " + destino);
+            salvarSistema();
         }
     }
 
@@ -111,6 +138,7 @@ public class FileSystemSimulator implements Serializable {
         if (dir != null) {
             dir.getArquivos().remove(nome);
             journal.registrar("Removido arquivo: " + caminho);
+            salvarSistema();
         }
     }
 
@@ -124,6 +152,7 @@ public class FileSystemSimulator implements Serializable {
             arq.setNome(novoNome);
             dir.getArquivos().put(novoNome, arq);
             journal.registrar("Arquivo renomeado: " + caminho + " → " + novoNome);
+            salvarSistema();
         }
     }
 
@@ -139,6 +168,22 @@ public class FileSystemSimulator implements Serializable {
             }
         } else {
             System.out.println("Diretório não encontrado.");
+        }
+    }
+
+    public void listarEstrutura() {
+        listarEstruturaRecursiva(raiz, "");
+    }
+
+    private void listarEstruturaRecursiva(Diretorio dir, String prefixo) {
+        System.out.println(prefixo + "📁 " + dir.getNome());
+
+        for (Arquivo arquivo : dir.getArquivos().values()) {
+            System.out.println(prefixo + "  └── 📄 " + arquivo.getNome());
+        }
+
+        for (Diretorio sub : dir.getSubdiretorios().values()) {
+            listarEstruturaRecursiva(sub, prefixo + "  ");
         }
     }
 

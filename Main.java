@@ -26,6 +26,7 @@ public class Main {
                     case "renomear_arquivo": fs.renomearArquivo(cmd[1], cmd[2]); break;
                     case "listar": fs.listarDiretorio(cmd[1]); break;
                     case "log": fs.mostrarJournal(); break;
+                    case "arvore": fs.listarEstrutura();break;
                     default: System.out.println("Comando desconhecido.");
                 }
             } catch (Exception e) {
